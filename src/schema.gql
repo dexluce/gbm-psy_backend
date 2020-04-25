@@ -1,0 +1,154 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Meeting {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  date: DateTime!
+  virtualAddress: String
+  physicalAddress: String
+  evenement: Evenement!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type AppFile {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  url: String!
+}
+
+type Evenement {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  description: String
+  subscriptionsToEvenement: [SubscriptionToEvenement!]!
+  meetings: [Meeting!]!
+  isValid: Boolean!
+  files: [AppFile!]!
+}
+
+type SubscriptionToEvenement {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user: User!
+  evenement: Evenement!
+  isInstructor: Boolean!
+  isValid: Boolean!
+}
+
+type User {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  email: String!
+  firstname: String
+  isActive: Boolean!
+  lastname: String
+  role: Role!
+  subscriptionsToEvenement: [SubscriptionToEvenement!]!
+}
+
+"""User role"""
+enum Role {
+  ADMIN
+  FORMATOR
+  PARTICIPANT
+}
+
+type UserConnection {
+  items: [User!]
+  total: Int!
+}
+
+type EvenementConnection {
+  items: [Evenement!]
+  total: Int!
+}
+
+type Auth {
+  """JWT Bearer token"""
+  token: String!
+  user: User!
+}
+
+type Query {
+  me: User!
+  users(orderBy: UserOrder, filter: String, pageNumber: Int, pageSize: Int): UserConnection!
+  evenements(orderBy: EvenementOrder, filter: String, pageNumber: Int, pageSize: Int): EvenementConnection!
+}
+
+input UserOrder {
+  direction: OrderDirection!
+  field: UserOrderField!
+}
+
+"""
+Possible directions in which to order a list of items when provided an `orderBy` argument.
+"""
+enum OrderDirection {
+  asc
+  desc
+}
+
+"""Properties by which post connections can be ordered."""
+enum UserOrderField {
+  id
+  createdAt
+  updatedAt
+  firstName
+  lastName
+  email
+}
+
+input EvenementOrder {
+  direction: OrderDirection!
+  field: EvenementOrderField!
+}
+
+"""Properties by which post connections can be ordered."""
+enum EvenementOrderField {
+  id
+  title
+}
+
+type Mutation {
+  createUser(data: CreateUserInput!): User!
+  updateUser(data: UpdateUserInput!): User!
+  changePassword(data: ChangePasswordInput!): User!
+  login(data: LoginInput!): Auth!
+}
+
+input CreateUserInput {
+  email: String!
+  password: String!
+  firstname: String
+  lastname: String
+  isActive: Boolean!
+  role: String!
+}
+
+input UpdateUserInput {
+  firstname: String
+  lastname: String
+}
+
+input ChangePasswordInput {
+  oldPassword: String!
+  newPassword: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
