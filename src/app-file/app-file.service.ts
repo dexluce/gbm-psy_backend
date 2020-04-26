@@ -5,6 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Client } from 'minio';
 import { CreateFileForEvenementDto } from './dto/create-file-for-evenement.dto';
 import { Evenement } from 'src/evenement/evenement.model';
+import { promises } from 'dns';
+import { rejects } from 'assert';
 
 @Injectable()
 export class AppFileService {
@@ -30,13 +32,35 @@ export class AppFileService {
       evenement,
       name,
       description,
-      isPublic
+      isPublic,
+      bucketName,
     }: CreateFileForEvenementDto) {
     let appFile = new AppFile();
     appFile.name = name;
     appFile.description = description;
     appFile.isPublic = isPublic;
     appFile.evenement = evenement;
+    appFile.bucketName = bucketName;
     return this.appFileRepository.save(appFile);
+  }
+
+  async createBucket(baseName: string) {
+    const randomValueForBucketName = Math.random().toString(36).substring(7);
+    const bucketName = (baseName + randomValueForBucketName).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[/\u0020]/g, '').toLowerCase();
+
+    return await new Promise<string>((resolve, reject) => {
+      this.minioClient.makeBucket(bucketName, 'ch', async (err) => {
+        if (err) reject(err);
+        resolve(bucketName);
+    })});
+  }
+
+  async resolveSrc({ bucketName, name }: AppFile) {
+    return new Promise((resolve, reject) => {
+      this.minioClient.presignedUrl('GET', bucketName, name, 24*60*60, (err, presignedUrl) => {
+        if (err) reject(err);
+        resolve(presignedUrl);
+      })
+    }) 
   }
 }

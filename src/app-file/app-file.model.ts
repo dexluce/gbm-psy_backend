@@ -17,6 +17,9 @@ export class AppFile extends CommonModel {
   @Field((type) => String)
   src: string;
 
+  @Column((type) => String)
+  bucketName: string
+
   @Column({ default: false })
   @Field((type) => Boolean, { defaultValue: false })
   isPublic: boolean;

@@ -9,6 +9,9 @@ export class CreateFileForEvenementDto {
   @Field()
   name: string;
   
+  @Field()
+  bucketName: string;
+
   @Field({ defaultValue: '' })
   description: string;
 
