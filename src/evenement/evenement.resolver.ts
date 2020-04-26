@@ -3,6 +3,8 @@ import {
   Query,
   Args,
   Mutation,
+  Parent,
+  ResolveField,
 } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/gql-auth.guard';
@@ -13,12 +15,16 @@ import { Roles } from 'src/user/roles.decorator';
 import { Role } from 'src/user/user.model';
 import { GqlRoleGuard } from 'src/user/gql-role.guard';
 import { CreateEvenementInput } from './dto/create-evenement-input.dto';
+import { AppFileService } from 'src/app-file/app-file.service';
+import { Repository } from 'typeorm';
+import { AppFile } from 'src/app-file/app-file.model';
 
 @Resolver((of) => Evenement)
 @UseGuards(GqlAuthGuard)
 export class EvenementResolver {
   constructor(
     private evenementService: EvenementService,
+    private appFileService: AppFileService,
   ) {}
 
   @Query((returns) => PaginatedList)
@@ -35,4 +41,8 @@ export class EvenementResolver {
     return this.evenementService.createEvenement(createEvenementData);
   }
 
+  @ResolveField('files')
+  async files(@Parent() evenement: Evenement) {
+    return this.appFileService.findAll(evenement);
+  }
 }

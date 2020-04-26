@@ -4,6 +4,7 @@ import { AppFile } from './app-file.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Client } from 'minio';
 import { CreateFileForEvenementDto } from './dto/create-file-for-evenement.dto';
+import { Evenement } from 'src/evenement/evenement.model';
 
 @Injectable()
 export class AppFileService {
@@ -19,6 +20,10 @@ export class AppFileService {
       accessKey: process.env.APP_MINIO_ACCESS_KEY,
       secretKey: process.env.APP_MINIO_SECRET_KEY
     })
+  }
+
+  async findAll(evenement: Evenement) {
+    return this.appFileRepository.find({ where: evenement });
   }
 
   async createFileForEvenement({

@@ -9,5 +9,8 @@ import { AppFileResolver } from './app-file.resolver';
   imports: [
     TypeOrmModule.forFeature([AppFile]),
   ],
+  exports: [
+    AppFileService,
+  ],
 })
 export class AppFileModule {}
