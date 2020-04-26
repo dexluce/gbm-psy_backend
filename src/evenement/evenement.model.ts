@@ -31,6 +31,7 @@ export class Evenement extends CommonModel {
   @Column()
   fileBucketName: string
   
+  @OneToMany(type => AppFile, appFile => appFile.evenement)
   @Field((type) => [AppFile])
-  files: AppFile[]  
+  files: AppFile[];
 }

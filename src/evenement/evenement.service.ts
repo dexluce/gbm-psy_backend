@@ -10,6 +10,10 @@ export class EvenementService {
     @InjectRepository(Evenement)
     private readonly evenementsRepository: Repository<Evenement>,
   ) {}
+  async getById(id: string) {
+    return await this.evenementsRepository.findOne(id);
+  }
+
   async getEvenements({ filter, orderBy, orderDirection, pageSize, pageNumber }: PaginationArgs) {
     const [evenements, total] = await this.evenementsRepository.findAndCount({
       where: filter ? [

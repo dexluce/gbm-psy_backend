@@ -1,6 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { CommonModel } from 'src/common/common.model';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
+import { Evenement } from 'src/evenement/evenement.model';
 
 @Entity()
 @ObjectType()
@@ -20,6 +21,7 @@ export class AppFile extends CommonModel {
   @Field((type) => Boolean, { defaultValue: false })
   isPublic: boolean;
 
-  @Column()
-  fileBucketName: string
+  @ManyToOne(type => Evenement, evenement => evenement.files)
+  @Field((type) => Evenement)
+  evenement: Evenement
 }

@@ -25,6 +25,7 @@ type AppFile {
   description: String
   src: String!
   isPublic: Boolean
+  evenement: Evenement!
 }
 
 type Evenement {
@@ -96,6 +97,7 @@ type Mutation {
   createUser(data: CreateUserInput!): User!
   updateUser(data: UpdateUserInput!): User!
   changePassword(data: ChangePasswordInput!): User!
+  addFileToEvenement(data: CreateFileInput!): AppFile!
   login(data: LoginInput!): Auth!
 }
 
@@ -117,6 +119,17 @@ input ChangePasswordInput {
   oldPassword: String!
   newPassword: String!
 }
+
+input CreateFileInput {
+  evenementId: String!
+  name: String!
+  description: String = ""
+  isPublic: Boolean = false
+  file: Upload!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input LoginInput {
   email: String!

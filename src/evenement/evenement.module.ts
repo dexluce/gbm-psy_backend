@@ -9,5 +9,8 @@ import { EvenementService } from './evenement.service';
     TypeOrmModule.forFeature([Evenement]),
   ],
   providers: [EvenementResolver, EvenementService],
+  exports: [
+    EvenementService,
+  ],
 })
 export class EvenementModule {}
