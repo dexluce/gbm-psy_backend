@@ -20,15 +20,10 @@ export class EvenementResolver {
     private evenementService: EvenementService,
   ) {}
 
-  @Query((returns) => EvenementPaginatedList)
+  @Query((returns) => PaginatedList)
   @Roles(Role.ADMIN)
   @UseGuards(GqlRoleGuard)
   async evenements(@Args() args: PaginationArgs) {
     return this.evenementService.getEvenements( args );
   }
 }
-
-@ObjectType({
-  implements: [PaginatedList],
-})
-class EvenementPaginatedList implements PaginatedList<Evenement> { items: Evenement[]; total: number; }

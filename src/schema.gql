@@ -66,22 +66,12 @@ enum Role {
   PARTICIPANT
 }
 
-type UserPaginatedList implements PaginatedList {
-  items: [PaginableRessource!]!
-  total: Int!
-}
-
-interface PaginatedList {
+type PaginatedList {
   items: [PaginableRessource!]!
   total: Int!
 }
 
 union PaginableRessource = User | Evenement | Meeting
-
-type EvenementPaginatedList implements PaginatedList {
-  items: [PaginableRessource!]!
-  total: Int!
-}
 
 type Auth {
   """JWT Bearer token"""
@@ -91,8 +81,8 @@ type Auth {
 
 type Query {
   me: User!
-  users(orderBy: String = "", orderDirection: OrderDirection = ASC, filter: String = "", pageNumber: Int = 0, pageSize: Int = 5): UserPaginatedList!
-  evenements(orderBy: String = "", orderDirection: OrderDirection = ASC, filter: String = "", pageNumber: Int = 0, pageSize: Int = 5): EvenementPaginatedList!
+  users(orderBy: String = "", orderDirection: OrderDirection = ASC, filter: String = "", pageNumber: Int = 0, pageSize: Int = 5): PaginatedList!
+  evenements(orderBy: String = "", orderDirection: OrderDirection = ASC, filter: String = "", pageNumber: Int = 0, pageSize: Int = 5): PaginatedList!
 }
 
 enum OrderDirection {

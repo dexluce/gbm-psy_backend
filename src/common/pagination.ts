@@ -1,4 +1,4 @@
-import { Field, ArgsType , Int, createUnionType, InterfaceType, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, ArgsType , Int, createUnionType, ObjectType, registerEnumType, Resolver } from '@nestjs/graphql';
 import { User } from 'src/user/user.model';
 import { Evenement } from 'src/evenement/evenement.model';
 import { Meeting } from 'src/meetings/meeting.model';
@@ -31,15 +31,10 @@ export const PaginableRessourceUnion = createUnionType({
   types: () => [User, Evenement, Meeting],
 })
 
-@InterfaceType()
-export abstract class PaginatedList<PaginableRessources> {
+@ObjectType()
+export class PaginatedList {
   @Field((type) => [PaginableRessourceUnion])
-  items: PaginableRessources[];
+  items: Array<typeof PaginableRessourceUnion>;
   @Field((type) => Int)
   total: number;
 }
-
-@ObjectType({
-  implements: [PaginatedList],
-})
-export class MeetingPaginatedList implements PaginatedList<Meeting> { items: Meeting[]; total: number; }

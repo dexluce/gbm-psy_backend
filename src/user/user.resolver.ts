@@ -29,7 +29,7 @@ export class UserResolver {
     return user;
   }
 
-  @Query((returns) => UserPaginatedList)
+  @Query((returns) => PaginatedList)
   @Roles(Role.ADMIN)
   @UseGuards(GqlRoleGuard)
   async users(@Args() args: PaginationArgs) {
@@ -63,8 +63,3 @@ export class UserResolver {
     );
   }
 }
-
-@ObjectType({
-  implements: [PaginatedList],
-})
-class UserPaginatedList implements PaginatedList<User> { items: User[]; total: number; }
