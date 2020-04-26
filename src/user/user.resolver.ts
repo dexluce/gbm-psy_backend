@@ -4,6 +4,8 @@ import {
   Mutation,
   Args,
   ObjectType,
+  ResolveField,
+  Parent,
 } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { UserEntity } from './user.decorator';
@@ -61,5 +63,11 @@ export class UserResolver {
       user.password,
       changePassword
     );
+  }
+
+  @ResolveField('subscriptionsToEvenement')
+  async subscriptionsToEvenement(@Parent() user: User) {
+    console.log(await this.userService.getSubscriptionsToEvenement(user))
+    return this.userService.getSubscriptionsToEvenement(user);
   }
 }

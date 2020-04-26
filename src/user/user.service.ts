@@ -76,4 +76,11 @@ export class UserService {
 
     return this.usersRepository.update({ id: userId }, { password: hashedPassword });
   }
+
+  async getSubscriptionsToEvenement(user: User) {
+    return (await this.usersRepository.findOne({
+      where: user,
+      relations: ['subscriptionsToEvenement']
+    })).subscriptionsToEvenement;
+  }
 }
