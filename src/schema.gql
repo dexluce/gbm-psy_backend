@@ -22,7 +22,9 @@ type AppFile {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
-  url: String!
+  description: String
+  src: String!
+  isPublic: Boolean
 }
 
 type Evenement {
