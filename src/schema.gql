@@ -66,13 +66,20 @@ enum Role {
   PARTICIPANT
 }
 
-type UserConnection {
-  items: [User!]
+type UserPaginatedList implements PaginatedList {
+  items: [PaginableRessource!]!
   total: Int!
 }
 
-type EvenementConnection {
-  items: [Evenement!]
+interface PaginatedList {
+  items: [PaginableRessource!]!
+  total: Int!
+}
+
+union PaginableRessource = User | Evenement | Meeting
+
+type EvenementPaginatedList implements PaginatedList {
+  items: [PaginableRessource!]!
   total: Int!
 }
 
@@ -84,42 +91,13 @@ type Auth {
 
 type Query {
   me: User!
-  users(orderBy: UserOrder, filter: String, pageNumber: Int, pageSize: Int): UserConnection!
-  evenements(orderBy: EvenementOrder, filter: String, pageNumber: Int, pageSize: Int): EvenementConnection!
+  users(orderBy: String = "", orderDirection: OrderDirection = ASC, filter: String = "", pageNumber: Int = 0, pageSize: Int = 5): UserPaginatedList!
+  evenements(orderBy: String = "", orderDirection: OrderDirection = ASC, filter: String = "", pageNumber: Int = 0, pageSize: Int = 5): EvenementPaginatedList!
 }
 
-input UserOrder {
-  direction: OrderDirection!
-  field: UserOrderField!
-}
-
-"""
-Possible directions in which to order a list of items when provided an `orderBy` argument.
-"""
 enum OrderDirection {
-  asc
-  desc
-}
-
-"""Properties by which post connections can be ordered."""
-enum UserOrderField {
-  id
-  createdAt
-  updatedAt
-  firstName
-  lastName
-  email
-}
-
-input EvenementOrder {
-  direction: OrderDirection!
-  field: EvenementOrderField!
-}
-
-"""Properties by which post connections can be ordered."""
-enum EvenementOrderField {
-  id
-  title
+  ASC
+  DESC
 }
 
 type Mutation {

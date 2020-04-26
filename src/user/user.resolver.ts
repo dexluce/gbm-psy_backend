@@ -3,6 +3,7 @@ import {
   Query,
   Mutation,
   Args,
+  ObjectType,
 } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { UserEntity } from './user.decorator';
@@ -10,13 +11,11 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { User, Role } from './user.model';
 import { UserService } from './user.service';
 import { GqlAuthGuard } from 'src/auth/gql-auth.guard';
-import { UserOrder } from './user.order';
-import { PaginationArgs } from 'src/common/pagination/pagination-args';
 import { CreateUserInput } from './dto/create-user.input';
 import { ChangePasswordInput } from './dto/change-password.input';
 import { Roles } from './roles.decorator';
 import { GqlRoleGuard } from './gql-role.guard';
-import { UserConnection } from 'src/common/pagination/pagination';
+import { PaginationArgs, PaginatedList } from 'src/common/pagination';
 
 @Resolver((of) => User)
 @UseGuards(GqlAuthGuard)
@@ -30,21 +29,11 @@ export class UserResolver {
     return user;
   }
 
-  @Query((returns) => UserConnection)
+  @Query((returns) => UserPaginatedList)
   @Roles(Role.ADMIN)
   @UseGuards(GqlRoleGuard)
-  async users(
-    @Args() paginationArgs: PaginationArgs,
-    @Args({ name: 'filter', type: () => String, nullable: true })
-    filter: string,
-    @Args({
-      name: 'orderBy',
-      type: () => UserOrder,
-      nullable: true,
-    })
-    orderBy: UserOrder
-  ) {
-    return this.userService.getUsers( paginationArgs, filter, orderBy );
+  async users(@Args() args: PaginationArgs) {
+    return this.userService.getUsers( args );
   }
 
   @Mutation((returns) => User)
@@ -74,3 +63,8 @@ export class UserResolver {
     );
   }
 }
+
+@ObjectType({
+  implements: [PaginatedList],
+})
+class UserPaginatedList implements PaginatedList<User> { items: User[]; total: number; }

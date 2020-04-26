@@ -1,13 +1,12 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './user.model';
-import { getConnection, Repository, Like } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaginationArgs } from 'src/common/pagination/pagination-args';
-import { UserOrder } from './user.order';
 import { PasswordService } from './password.service';
 import { ChangePasswordInput } from './dto/change-password.input';
+import { PaginationArgs } from 'src/common/pagination';
 
 @Injectable()
 export class UserService {
@@ -24,15 +23,16 @@ export class UserService {
     return this.usersRepository.findOne({where: {email}});
   }
 
-  async getUsers({pageNumber,pageSize}: PaginationArgs, filter: string, orderBy: UserOrder) {
+  async getUsers(options: PaginationArgs) {
+    const { filter=' ', orderBy, orderDirection, pageSize, pageNumber } = options;
     const [users, total] = await this.usersRepository.findAndCount({
       where: filter ? [
-        { firstName: Like('%' + filter + '%') },
-        { lastName: Like('%' + filter + '%') },
-        { mail: Like('%' + filter + '%') },
+        { firstname: Like('%' + filter + '%') },
+        { lastname: Like('%' + filter + '%') },
+        { email: Like('%' + filter + '%') },
       ] : [],
       order: orderBy ? {
-        [orderBy.field]: orderBy.direction,
+        [orderBy]: orderDirection,
       } : {},
       take: pageSize,
       skip: pageNumber * pageSize,

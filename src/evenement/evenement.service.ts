@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Evenement } from './evenement.model';
-import { EvenementOrder } from './evenement.order';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
-import { PaginationArgs } from 'src/common/pagination/pagination-args';
+import { PaginationArgs } from 'src/common/pagination';
 
 @Injectable()
 export class EvenementService {
@@ -11,13 +10,13 @@ export class EvenementService {
     @InjectRepository(Evenement)
     private readonly evenementsRepository: Repository<Evenement>,
   ) {}
-  async getEvenements({pageNumber,pageSize}: PaginationArgs, filter: string, orderBy: EvenementOrder) {
+  async getEvenements({ filter, orderBy, orderDirection, pageSize, pageNumber }: PaginationArgs) {
     const [evenements, total] = await this.evenementsRepository.findAndCount({
       where: filter ? [
         { title: Like('%' + filter + '%') },
       ] : [],
       order: orderBy ? {
-        [orderBy.field]: orderBy.direction,
+        [orderBy]: orderDirection,
       } : {},
       take: pageSize,
       skip: pageNumber * pageSize,
