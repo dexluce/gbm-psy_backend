@@ -4,26 +4,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
 import { PaginationArgs } from 'src/common/pagination';
 import { CreateEvenementInput } from './dto/create-evenement-input.dto';
-import { Client } from 'minio';
 import { AppFileService } from 'src/app-file/app-file.service';
 
 @Injectable()
 export class EvenementService {
-  private minioClient: Client;
-
   constructor(
     @InjectRepository(Evenement)
     private readonly evenementsRepository: Repository<Evenement>,
     private appFileService: AppFileService,
-  ) {
-    this.minioClient = new Client({
-      endPoint: process.env.APP_MINIO_ADDRESS,
-      port: 9000,
-      useSSL: false,
-      accessKey: process.env.APP_MINIO_ACCESS_KEY,
-      secretKey: process.env.APP_MINIO_SECRET_KEY
-    })
-  }
+  ) { }
 
   async getById(id: string) {
     return await this.evenementsRepository.findOne(id);

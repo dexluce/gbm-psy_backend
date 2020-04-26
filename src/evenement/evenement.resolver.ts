@@ -19,6 +19,7 @@ import { AppFileService } from 'src/app-file/app-file.service';
 import { Repository } from 'typeorm';
 import { AppFile } from 'src/app-file/app-file.model';
 import { MeetingService } from 'src/meeting/meeting.service';
+import { SubscriptionToEvenementService } from 'src/subscription-to-evenement/subscription-to-evenement.service';
 
 @Resolver((of) => Evenement)
 @UseGuards(GqlAuthGuard)
@@ -26,7 +27,8 @@ export class EvenementResolver {
   constructor(
     private evenementService: EvenementService,
     private appFileService: AppFileService,
-    private meetingService: MeetingService
+    private meetingService: MeetingService,
+    private subscriptionsToEvenementService: SubscriptionToEvenementService
   ) {}
 
   @Query((returns) => PaginatedList)
@@ -51,5 +53,10 @@ export class EvenementResolver {
   @ResolveField('meetings')
   async meetings(@Parent() evenement: Evenement) {
     return this.meetingService.findAllByEvenement(evenement);
+  }
+
+  @ResolveField('subscriptionsToEvenement')
+  async subscriptionsToEvenement(@Parent() evenement: Evenement) {
+    return this.subscriptionsToEvenementService.findAllByEvenement(evenement);
   }
 }
