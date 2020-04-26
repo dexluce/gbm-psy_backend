@@ -1,7 +1,7 @@
 import { Field, ArgsType , Int, createUnionType, ObjectType, registerEnumType, Resolver } from '@nestjs/graphql';
 import { User } from 'src/user/user.model';
 import { Evenement } from 'src/evenement/evenement.model';
-import { Meeting } from 'src/meetings/meeting.model';
+import { Meeting } from 'src/meeting/meeting.model';
 
 export enum OrderDirectionEnum { ASC='ASC', DESC='DESC' }
   registerEnumType(OrderDirectionEnum, {

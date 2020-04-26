@@ -4,7 +4,7 @@ import { join } from 'path';
 import { UserModule } from './user/user.module';
 import { EvenementModule } from './evenement/evenement.module';
 import { SubscriptionToEvenementModule } from './subscription-to-evenement/subscription-to-evenement.module';
-import { MeetingModule } from './meetings/meeting.module';
+import { MeetingModule } from './meeting/meeting.module';
 import { AppFileModule } from './app-file/app-file.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';

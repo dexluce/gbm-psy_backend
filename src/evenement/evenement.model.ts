@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { CommonModel } from 'src/common/common.model';
 import { SubscriptionToEvenement } from 'src/subscription-to-evenement/subscription-to-evenement.model';
-import { Meeting } from 'src/meetings/meeting.model';
+import { Meeting } from 'src/meeting/meeting.model';
 import { AppFile } from 'src/app-file/app-file.model';
 import { Column, OneToMany, Entity } from 'typeorm';
 

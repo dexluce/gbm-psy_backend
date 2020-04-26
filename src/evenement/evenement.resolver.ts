@@ -18,6 +18,7 @@ import { CreateEvenementInput } from './dto/create-evenement-input.dto';
 import { AppFileService } from 'src/app-file/app-file.service';
 import { Repository } from 'typeorm';
 import { AppFile } from 'src/app-file/app-file.model';
+import { MeetingService } from 'src/meeting/meeting.service';
 
 @Resolver((of) => Evenement)
 @UseGuards(GqlAuthGuard)
@@ -25,6 +26,7 @@ export class EvenementResolver {
   constructor(
     private evenementService: EvenementService,
     private appFileService: AppFileService,
+    private meetingService: MeetingService
   ) {}
 
   @Query((returns) => PaginatedList)
@@ -44,5 +46,10 @@ export class EvenementResolver {
   @ResolveField('files')
   async files(@Parent() evenement: Evenement) {
     return this.appFileService.findAll(evenement);
+  }
+
+  @ResolveField('meetings')
+  async meetings(@Parent() evenement: Evenement) {
+    return this.meetingService.findAllByEvenement(evenement);
   }
 }
