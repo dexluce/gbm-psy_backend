@@ -25,12 +25,4 @@ export class SubscriptionToEvenementService {
       relations: ['evenement'],
     })).evenement;
   }
-
-  async findAllByEvenement(evenement: Evenement) {
-    return this.subscriptionToEvenementRepository.find({ where: evenement });
-  }
-
-  async findAllByUser(user: User) {
-    return this.subscriptionToEvenementRepository.find({ where: user });
-  }
 }

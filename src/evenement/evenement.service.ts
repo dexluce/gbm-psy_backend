@@ -40,4 +40,11 @@ export class EvenementService {
     const bucketName = await this.appFileService.createBucket(createEvenementInput.title);
     return this.evenementsRepository.save({...createEvenementInput, fileBucketName: bucketName});
   }
+
+  async getSubscriptionsToEvenement(evenement: Evenement) {
+    return (await this.evenementsRepository.findOne({
+      where: evenement,
+      relations: ['subscriptionsToEvenement'],
+    })).subscriptionsToEvenement;
+  }
 }

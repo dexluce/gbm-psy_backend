@@ -57,6 +57,6 @@ export class EvenementResolver {
 
   @ResolveField('subscriptionsToEvenement')
   async subscriptionsToEvenement(@Parent() evenement: Evenement) {
-    return this.subscriptionsToEvenementService.findAllByEvenement(evenement);
+    return this.evenementService.getSubscriptionsToEvenement(evenement);
   }
 }

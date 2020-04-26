@@ -67,7 +67,6 @@ export class UserResolver {
 
   @ResolveField('subscriptionsToEvenement')
   async subscriptionsToEvenement(@Parent() user: User) {
-    console.log(await this.userService.getSubscriptionsToEvenement(user))
     return this.userService.getSubscriptionsToEvenement(user);
   }
 }
