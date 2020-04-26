@@ -2,18 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { AppFile } from './app-file.model';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateFileInput } from './dto/create-file.dto';
 import { Client } from 'minio';
-import { EvenementService } from 'src/evenement/evenement.service';
+import { CreateFileForEvenementDto } from './dto/create-file-for-evenement.dto';
 
 @Injectable()
 export class AppFileService {
-  private minioClient: Client;
-
+  minioClient: Client
   constructor(
     @InjectRepository(AppFile)
     private readonly appFileRepository: Repository<AppFile>,
-    private readonly evenementService: EvenementService,
   ) {
     this.minioClient = new Client({
       endPoint: process.env.APP_MINIO_ADDRESS,
@@ -24,18 +21,17 @@ export class AppFileService {
     })
   }
 
-  async createFileForEvenement(createFileInput: CreateFileInput) {
-    const evenement = await this.evenementService.getById(createFileInput.evenementId);
-    const savedFile = await this.minioClient.putObject(
-      evenement.fileBucketName,
-      createFileInput.name,
-      createFileInput.file,
-    )
+  async createFileForEvenement({
+      evenement,
+      name,
+      description,
+      isPublic
+    }: CreateFileForEvenementDto) {
     let appFile = new AppFile();
-    appFile.name = createFileInput.name;
-    appFile.description = createFileInput.description;
-    appFile.isPublic = createFileInput.isPublic;
+    appFile.name = name;
+    appFile.description = description;
+    appFile.isPublic = isPublic;
     appFile.evenement = evenement;
-    this.appFileRepository.save(appFile);
+    return this.appFileRepository.save(appFile);
   }
 }
