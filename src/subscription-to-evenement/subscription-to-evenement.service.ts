@@ -13,11 +13,17 @@ export class SubscriptionToEvenementService {
   ) { }
 
   async getUser(subscriptionToEvenement: SubscriptionToEvenement) {
-    return (await this.subscriptionToEvenementRepository.findOne(subscriptionToEvenement)).user;
+    return (await this.subscriptionToEvenementRepository.findOne({
+      where: subscriptionToEvenement,
+      relations: ['user'],
+    })).user;
   }
 
   async getEvenement(subscriptionToEvenement: SubscriptionToEvenement) {
-    return (await this.subscriptionToEvenementRepository.findOne(subscriptionToEvenement)).evenement;
+    return (await this.subscriptionToEvenementRepository.findOne({
+      where: subscriptionToEvenement,
+      relations: ['evenement'],
+    })).evenement;
   }
 
   async findAllByEvenement(evenement: Evenement) {
