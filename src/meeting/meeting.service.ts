@@ -16,7 +16,11 @@ export class MeetingService {
     return this.meetingRepository.find({ where: evenement });
   }
 
-  async createInEvenement(args: CreateMeetingInput) {
-    return this.meetingRepository.save(args);
+  async createInEvenement({ evenementId, physicalAddress, date }: CreateMeetingInput) {
+    return this.meetingRepository.save({
+      evenement: {id: evenementId},
+      physicalAddress,
+      date,
+    });
   }
 }

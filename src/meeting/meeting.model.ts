@@ -10,11 +10,11 @@ export class Meeting extends CommonModel {
   @Field((type) => Date)
   date: Date;
 
-  @Column()
+  @Column({ default: '' })
   @Field((type) => String, { nullable: true })
   virtualAddress: string;
 
-  @Column()
+  @Column({ default: '' })
   @Field((type) => String, { nullable: true })
   physicalAddress: string;
 

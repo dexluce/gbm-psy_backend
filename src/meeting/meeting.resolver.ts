@@ -12,6 +12,10 @@ export class MeetingResolver {
 
   @Mutation((returns) => Meeting)
   async createMeeting(@Args('data') args: CreateMeetingInput) {
-    this.meetingService.createInEvenement(args);
+    return this.meetingService.createInEvenement({
+      date: args.date,
+      evenementId: args.evenementId,
+      physicalAddress: args.physicalAddress
+    });
   }
 }
