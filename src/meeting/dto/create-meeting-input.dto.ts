@@ -2,12 +2,12 @@ import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
 export class CreateMeetingInput {
-  @Field()
+  @Field((type) => String)
   evenementId: string;
 
-  @Field()
-  date: string;
+  @Field((type) => Date)
+  date: Date;
   
-  @Field({ defaultValue: '' })
+  @Field((type) => String, { defaultValue: '' })
   physicalAddress: string;
 }
