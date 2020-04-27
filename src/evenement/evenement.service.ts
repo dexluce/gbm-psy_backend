@@ -35,10 +35,24 @@ export class EvenementService {
       total: total
     }
   }
-
+  
   async createEvenement(createEvenementInput: CreateEvenementInput) {
     const bucketName = await this.appFileService.createBucket(createEvenementInput.title);
     return this.evenementsRepository.save({...createEvenementInput, fileBucketName: bucketName});
+  }
+  
+  async getFiles(evenement: Evenement) {
+    return (await this.evenementsRepository.findOne({
+      where: {evenement},
+      relations: ['files']
+    })).files;
+  }
+
+  async getMeetings(evenement: Evenement) {
+    return (await this.evenementsRepository.findOne({
+      where: {evenement},
+      relations: ['meetings']
+    })).meetings;
   }
 
   async getSubscriptionsToEvenement(evenement: Evenement) {

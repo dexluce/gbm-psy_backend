@@ -85,6 +85,7 @@ type Auth {
 type Query {
   me: User!
   users(orderBy: String = "", orderDirection: OrderDirection = ASC, filter: String = "", pageNumber: Int = 0, pageSize: Int = 5): PaginatedList!
+  evenement(evenementId: String!): Evenement!
   evenements(orderBy: String = "", orderDirection: OrderDirection = ASC, filter: String = "", pageNumber: Int = 0, pageSize: Int = 5): PaginatedList!
 }
 
