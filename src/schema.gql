@@ -87,6 +87,7 @@ type Query {
   users(orderBy: String = "", orderDirection: OrderDirection = ASC, filter: String = "", pageNumber: Int = 0, pageSize: Int = 5): PaginatedList!
   evenement(evenementId: String!): Evenement!
   evenements(orderBy: String = "", orderDirection: OrderDirection = ASC, filter: String = "", pageNumber: Int = 0, pageSize: Int = 5): PaginatedList!
+  meetingsForEvenement(evenementId: String!): [Meeting!]!
 }
 
 enum OrderDirection {
