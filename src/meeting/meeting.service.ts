@@ -12,10 +12,6 @@ export class MeetingService {
     private readonly meetingRepository: Repository<Meeting>,
   ) { }
 
-  async findAllByEvenement(evenement: Evenement) {
-    return this.meetingRepository.find({ where: evenement });
-  }
-
   async findAllByEvenementId(id: string) {
     return this.meetingRepository.find({ where: {evenement: {id}} });
   }
