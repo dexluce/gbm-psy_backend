@@ -12,7 +12,7 @@ export class Evenement extends CommonModel {
   @Field((type) => String)
   title: string;
 
-  @Column({ default: '' })
+  @Column('text', { nullable: true })
   @Field((type) => String, { nullable: true })
   description: string;
 
