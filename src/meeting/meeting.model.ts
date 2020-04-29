@@ -18,6 +18,9 @@ export class Meeting extends CommonModel {
   @Field((type) => String, { nullable: true })
   physicalAddress: string;
 
+  @Field((type) => String, { nullable: true })
+  jitsiMeetToken: string
+
   @ManyToOne(type => Evenement, evenement => evenement.meetings)
   @Field((type) => Evenement)
   evenement: Evenement;

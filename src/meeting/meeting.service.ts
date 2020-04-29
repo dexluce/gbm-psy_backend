@@ -4,6 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Meeting } from './meeting.model';
 import { Repository } from 'typeorm';
 import { CreateMeetingInput } from './dto/create-meeting-input.dto';
+import { User } from 'src/user/user.model';
+import * as Jwt from 'jsonwebtoken';
 
 @Injectable()
 export class MeetingService {
@@ -11,6 +13,10 @@ export class MeetingService {
     @InjectRepository(Meeting)
     private readonly meetingRepository: Repository<Meeting>,
   ) { }
+
+  async findById(id: string) {
+    return this.meetingRepository.findOne({ where: { id }});
+  }
 
   async findAllByEvenementId(id: string) {
     return this.meetingRepository.find({ where: {evenement: {id}} });
@@ -22,5 +28,21 @@ export class MeetingService {
       physicalAddress,
       date,
     });
+  }
+
+  async getToken(meeting: Meeting, user: User) {
+    console.log(process.env.APP_JITSI_JWT_APP_ID)
+    return Jwt.sign({
+      "context": {
+        "user": {
+          "name": `${user.firstname} ${user.lastname}`,
+          "email": user.email
+        }
+      },
+      "aud": process.env.APP_JITSI_JWT_APP_ID,
+      "iss": 'frontend',
+      "sub": "web",
+      "room": meeting.virtualAddress
+    }, process.env.APP_JITSI_JWT_APP_SECRET)
   }
 }
