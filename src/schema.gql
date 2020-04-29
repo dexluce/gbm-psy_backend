@@ -37,7 +37,8 @@ type Evenement {
   description: String
   subscriptionsToEvenement: [SubscriptionToEvenement!]!
   meetings: [Meeting!]!
-  isValid: Boolean!
+  isActive: Boolean!
+  isPublic: Boolean!
   files: [AppFile!]!
 }
 
@@ -49,6 +50,7 @@ type SubscriptionToEvenement {
   evenement: Evenement!
   isInstructor: Boolean!
   isValid: Boolean!
+  isCertified: Boolean!
 }
 
 type User {
@@ -128,7 +130,8 @@ input ChangePasswordInput {
 input CreateEvenementInput {
   title: String!
   description: String = ""
-  isValid: Boolean = false
+  isActive: Boolean = false
+  isPublic: Boolean = false
 }
 
 input CreateMeetingInput {

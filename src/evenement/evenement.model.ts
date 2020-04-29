@@ -26,7 +26,11 @@ export class Evenement extends CommonModel {
   
   @Column()
   @Field((type) => Boolean)
-  isValid: boolean;
+  isActive: boolean;
+
+  @Column()
+  @Field((type) => Boolean)
+  isPublic: boolean;
 
   @Column()
   fileBucketName: string

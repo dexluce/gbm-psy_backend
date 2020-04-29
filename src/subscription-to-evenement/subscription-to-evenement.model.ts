@@ -22,4 +22,8 @@ export class SubscriptionToEvenement extends CommonModel {
   @Column({ default: false })
   @Field((type) => Boolean)
   isValid: boolean;
+
+  @Column({ default: false })
+  @Field((type) => Boolean)
+  isCertified: boolean;
 }
