@@ -28,7 +28,7 @@ export class MeetingResolver {
   }
 
   @Query((returns) => [Meeting])
-  async meetingsForEvenement(@Args('evenementId') evenementId: string) {
+  async meetingsInEvenement(@Args('evenementId') evenementId: string) {
     return this.meetingService.findAllByEvenementId(evenementId);
   }
 
