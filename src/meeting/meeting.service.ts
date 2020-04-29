@@ -31,7 +31,6 @@ export class MeetingService {
   }
 
   async getToken(meeting: Meeting, user: User) {
-    console.log(process.env.APP_JITSI_JWT_APP_ID)
     return Jwt.sign({
       "context": {
         "user": {
