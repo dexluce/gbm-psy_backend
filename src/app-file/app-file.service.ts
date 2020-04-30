@@ -7,6 +7,7 @@ import { CreateFileForEvenementDto } from './dto/create-file-for-evenement.dto';
 import { Evenement } from 'src/evenement/evenement.model';
 import { promises } from 'dns';
 import { rejects } from 'assert';
+import { getNormalizedRandomizedName } from 'src/common/utils';
 
 @Injectable()
 export class AppFileService {
@@ -45,8 +46,7 @@ export class AppFileService {
   }
 
   async createBucket(baseName: string) {
-    const randomValueForBucketName = Math.random().toString(36).substring(7);
-    const bucketName = (baseName + randomValueForBucketName).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[/\u0020]/g, '').toLowerCase();
+    const bucketName = getNormalizedRandomizedName(baseName);
 
     return await new Promise<string>((resolve, reject) => {
       this.minioClient.makeBucket(bucketName, 'ch', async (err) => {
