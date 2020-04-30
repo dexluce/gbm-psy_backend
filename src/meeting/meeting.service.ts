@@ -19,7 +19,10 @@ export class MeetingService {
   }
 
   async findAllByEvenementId(id: string) {
-    return this.meetingRepository.find({ where: {evenement: {id}} });
+    return this.meetingRepository.find({
+      where: { evenement: {id} },
+      order: { date: 'DESC' }
+    });
   }
 
   async createInEvenement({ evenementId, physicalAddress, date }: CreateMeetingInput) {
