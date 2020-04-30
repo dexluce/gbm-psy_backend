@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { CreateMeetingInput } from './dto/create-meeting-input.dto';
 import { User } from 'src/user/user.model';
 import * as Jwt from 'jsonwebtoken';
+import { getNormalizedRandomizedName } from 'src/common/utils';
 
 @Injectable()
 export class MeetingService {
@@ -15,7 +16,7 @@ export class MeetingService {
   ) { }
 
   async findById(id: string) {
-    return this.meetingRepository.findOne({ where: { id }});
+    return this.meetingRepository.findOne({ where: { id }, relations: ['evenement']});
   }
 
   async findAllByEvenementId(id: string) {
@@ -23,6 +24,12 @@ export class MeetingService {
       where: { evenement: {id} },
       order: { date: 'DESC' }
     });
+  }
+
+  async refreshVirtualRoom(meetingId: string) {
+    const virtualRoomName = getNormalizedRandomizedName('GBMvirtualRoom' + meetingId)
+    await this.meetingRepository.update(meetingId, {virtualAddress: virtualRoomName});
+    return this.meetingRepository.findOne(meetingId, {relations: ['evenement']});
   }
 
   async createInEvenement({ evenementId, physicalAddress, date }: CreateMeetingInput) {

@@ -27,6 +27,11 @@ export class MeetingResolver {
     });
   }
 
+  @Mutation((returns) => Meeting)
+  async refreshVirtualRoom(@Args('meetingId') id: string) {
+    return this.meetingService.refreshVirtualRoom(id);
+  }
+
   @Query((returns) => [Meeting])
   async meetingsInEvenement(@Args('evenementId') evenementId: string) {
     return this.meetingService.findAllByEvenementId(evenementId);

@@ -105,6 +105,7 @@ type Mutation {
   changePassword(data: ChangePasswordInput!): User!
   createEvenement(data: CreateEvenementInput!): Evenement!
   createMeeting(data: CreateMeetingInput!): Meeting!
+  refreshVirtualRoom(meetingId: String!): Meeting!
   login(data: LoginInput!): Auth!
 }
 
