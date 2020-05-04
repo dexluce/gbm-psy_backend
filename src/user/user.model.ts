@@ -14,34 +14,68 @@ registerEnumType(Role, {
   description: 'User role',
 });
 
+export enum Sex {
+  MONSIEUR = 'MONSIEUR',
+  MADAME = 'MADAME',
+}
+
+registerEnumType(Sex, {
+  name: 'Sex',
+  description: 'User sex',
+});
+
 @Entity()
 @Unique(["email"])
 @ObjectType()
 export class User extends CommonModel {
   @Column()
-  @Field((type) => String)
-  email: string;
+  @Field((type) => Sex)
+  sex: Sex;
 
   @Column()
-  @Field((type) => String, { nullable: true })
+  @Field((type) => String)
   firstname?: string;
+
+  @Column()
+  @Field((type) => String)
+  lastname?: string;
+
+  @Column()
+  @Field((type) => String)
+  email: string;
+  
+  @Column()
+  @Field((type) => String)
+  phone: string;
+  
+  @Column()
+  @Field((type) => String)
+  profession: string;
+
+  @Column()
+  @Field((type) => String)
+  profession_place: string;
+  
+  @Column()
+  @Field((type) => String)
+  personnal_address: string;
+
+  @Column({ nullable: true })
+  @Field((type) => String, { nullable: true })
+  chargeable_address: string;
+
+  @Column()
+  password: string;
 
   @Column()
   @Field((type) => Boolean)
   isActive: boolean;
 
   @Column()
-  @Field((type) => String, { nullable: true })
-  lastname?: string;
-
-  @Column()
   @Field((type) => Role)
   role: Role;
-
+  
   @OneToMany(type => SubscriptionToEvenement, subscriptionToEvenement => subscriptionToEvenement.user)
   @Field((type) => [SubscriptionToEvenement])
   subscriptionsToEvenement: SubscriptionToEvenement[];
-
-  @Column()
-  password: string;
 }

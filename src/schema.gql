@@ -57,12 +57,24 @@ type User {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+  sex: Sex!
+  firstname: String!
+  lastname: String!
   email: String!
-  firstname: String
+  phone: String!
+  profession: String!
+  profession_place: String!
+  personnal_address: String!
+  chargeable_address: String
   isActive: Boolean!
-  lastname: String
   role: Role!
   subscriptionsToEvenement: [SubscriptionToEvenement!]!
+}
+
+"""User sex"""
+enum Sex {
+  MONSIEUR
+  MADAME
 }
 
 """User role"""
@@ -112,10 +124,16 @@ type Mutation {
 input CreateUserInput {
   email: String!
   password: String!
-  firstname: String
-  lastname: String
-  isActive: Boolean!
-  role: String!
+  firstname: String!
+  lastname: String!
+  sex: Sex!
+  phone: String!
+  profession: String!
+  profession_place: String!
+  personnal_address: String!
+  chargeable_address: String!
+  isActive: Boolean = false
+  role: Role = PARTICIPANT
 }
 
 input UpdateUserInput {
