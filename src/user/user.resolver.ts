@@ -15,37 +15,41 @@ import { UserService } from './user.service';
 import { GqlAuthGuard } from 'src/auth/gql-auth.guard';
 import { CreateUserInput } from './dto/create-user.input';
 import { ChangePasswordInput } from './dto/change-password.input';
-import { Roles } from './roles.decorator';
-import { GqlRoleGuard } from './gql-role.guard';
 import { PaginationArgs, PaginatedList } from 'src/common/pagination';
 
 @Resolver((of) => User)
-@UseGuards(GqlAuthGuard)
 export class UserResolver {
   constructor(
     private userService: UserService,
-  ) {}
-
+    ) {}
+    
   @Query((returns) => User)
+  @UseGuards(GqlAuthGuard)
   async me(@UserEntity() user: User): Promise<User> {
     return user;
   }
 
   @Query((returns) => PaginatedList)
-  @Roles(Role.ADMIN)
-  @UseGuards(GqlRoleGuard)
+  @UseGuards(GqlAuthGuard)
   async users(@Args() args: PaginationArgs) {
     return this.userService.getUsers( args );
   }
 
   @Mutation((returns) => User)
   async createUser(
-    @Args('data') createUserData: CreateUserInput
+    @Args('data') createUserData: CreateUserInput,
+    @UserEntity() user: User
   ) {
+    // Enforcing roles, if we're not admin or not connected, we can only create participant that need validation
+    if (!user || user.role !== Role.ADMIN) {
+      createUserData.isActive = false;
+      createUserData.role = Role.PARTICIPANT;
+    }
     return this.userService.createUser(createUserData);
   }
 
   @Mutation((returns) => User)
+  @UseGuards(GqlAuthGuard)
   async updateUser(
     @UserEntity() user: User,
     @Args('data') newUserData: UpdateUserInput
@@ -54,6 +58,7 @@ export class UserResolver {
   }
 
   @Mutation((returns) => User)
+  @UseGuards(GqlAuthGuard)
   async changePassword(
     @UserEntity() user: User,
     @Args('data') changePassword: ChangePasswordInput
