@@ -7,7 +7,7 @@ import {
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
-import { UseGuards } from '@nestjs/common';
+import { UseGuards, UnauthorizedException } from '@nestjs/common';
 import { UserEntity } from './user.decorator';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User, Role } from './user.model';
@@ -44,6 +44,10 @@ export class UserResolver {
     if (!user || user.role !== Role.ADMIN) {
       createUserData.isActive = false;
       createUserData.role = Role.PARTICIPANT;
+    }
+    // If we're connected but a simple user, we can't create another account
+    if (user && user.role === Role.PARTICIPANT) {
+      throw new UnauthorizedException('Vous n\'avez pas les autorisations pour créer un autre compte.')
     }
     return this.userService.createUser(createUserData);
   }
