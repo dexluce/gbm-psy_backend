@@ -21,7 +21,7 @@ import { PaginationArgs, PaginatedList } from 'src/common/pagination';
 export class UserResolver {
   constructor(
     private userService: UserService,
-    ) {}
+  ) {}
     
   @Query((returns) => User)
   @UseGuards(GqlAuthGuard)
@@ -38,15 +38,27 @@ export class UserResolver {
   @Mutation((returns) => User)
   async createUser(
     @Args('data') createUserData: CreateUserInput,
+  ) {
+    // Enforcing roles, if we're not connected, we can only create participant that need validation
+    createUserData.isActive = false;
+    createUserData.role = Role.PARTICIPANT;
+
+    return this.userService.createUser(createUserData);
+  }
+
+  @Mutation((returns) => User)
+  @UseGuards(GqlAuthGuard)
+  async createUserByAdmin(
+    @Args('data') createUserData: CreateUserInput,
     @UserEntity() user: User
   ) {
-    // Enforcing roles, if we're not admin or not connected, we can only create participant that need validation
-    if (!user || user.role !== Role.ADMIN) {
+    // Enforcing roles, if we're not admin, we can only create participant that need validation
+    if (user.role !== Role.ADMIN) {
       createUserData.isActive = false;
       createUserData.role = Role.PARTICIPANT;
     }
     // If we're connected but a simple user, we can't create another account
-    if (user && user.role === Role.PARTICIPANT) {
+    if (user.role === Role.PARTICIPANT) {
       throw new UnauthorizedException('Vous n\'avez pas les autorisations pour créer un autre compte.')
     }
     return this.userService.createUser(createUserData);
@@ -75,6 +87,7 @@ export class UserResolver {
   }
 
   @ResolveField('subscriptionsToEvenement')
+  @UseGuards(GqlAuthGuard)
   async subscriptionsToEvenement(@Parent() user: User) {
     return this.userService.getSubscriptionsToEvenement(user);
   }

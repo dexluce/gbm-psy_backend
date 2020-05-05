@@ -113,6 +113,7 @@ enum OrderDirection {
 
 type Mutation {
   createUser(data: CreateUserInput!): User!
+  createUserByAdmin(data: CreateUserInput!): User!
   updateUser(data: UpdateUserInput!): User!
   changePassword(data: ChangePasswordInput!): User!
   createEvenement(data: CreateEvenementInput!): Evenement!
