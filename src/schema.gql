@@ -119,6 +119,14 @@ type Mutation {
   createEvenement(data: CreateEvenementInput!): Evenement!
   createMeeting(data: CreateMeetingInput!): Meeting!
   refreshVirtualRoom(meetingId: String!): Meeting!
+  createSubscriptionToEvenement(evenementId: String!, userId: String!): SubscriptionToEvenement!
+  addFormatorToEvenement(evenementId: String!, userId: String!): SubscriptionToEvenement!
+
+  """Permet de valider l'inscription (à été payé/visé)"""
+  validateSubscriptionToEvenement(subscriptionToEvenementId: String!): SubscriptionToEvenement!
+
+  """Permet de certifier l'inscription (et donc l'utilisateur lié)"""
+  certifySubscriptionToEvenement(subscriptionToEvenementId: String!): SubscriptionToEvenement!
   login(data: LoginInput!): Auth!
 }
 
