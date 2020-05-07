@@ -16,6 +16,10 @@ export class Evenement extends CommonModel {
   @Field((type) => String, { nullable: true })
   description: string;
 
+  @Column('text', { nullable: true })
+  @Field((type) => String, { nullable: true })
+  conditions: string;
+
   @OneToMany(type => SubscriptionToEvenement, subscriptionToEvenement => subscriptionToEvenement.evenement)
   @Field((type) => [SubscriptionToEvenement])
   subscriptionsToEvenement: SubscriptionToEvenement[];

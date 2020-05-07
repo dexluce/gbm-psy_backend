@@ -35,6 +35,7 @@ type Evenement {
   updatedAt: DateTime!
   title: String!
   description: String
+  conditions: String
   subscriptionsToEvenement: [SubscriptionToEvenement!]!
   meetings: [Meeting!]!
   isActive: Boolean!
@@ -158,6 +159,7 @@ input ChangePasswordInput {
 input CreateEvenementInput {
   title: String!
   description: String = ""
+  conditions: String = ""
   isActive: Boolean = false
   isPublic: Boolean = false
 }

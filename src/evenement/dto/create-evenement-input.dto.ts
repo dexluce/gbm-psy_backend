@@ -8,6 +8,9 @@ export class CreateEvenementInput {
   @Field({ defaultValue: '' })
   description: string;
 
+  @Field({ defaultValue: '' })
+  conditions: string;
+
   @Field({ defaultValue: false })
   isActive: boolean;
 
